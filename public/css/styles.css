@@ -1,6 +1,266 @@
-/******* Change Box Model ***************/
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
+/* ===== Mobile first ===== */
+:root{
+  --ink:#1f2937;          /* gray-800 */
+  --muted:#4b5563;        /* gray-600 */
+  --bg:#ffffff;
+  --panel:#f3f4f6;        /* gray-100 */
+  --brand:#2563eb;        /* blue-600 */
+  --brand-ink:black;    /* on brand */
+  --border:#e5e7eb;       /* gray-200 */
+  --radius:12px;
+  --shadow:0 0 0 1px rgba(0,0,0,.04), 0 10px 20px rgba(0,0,0,.06);
 }
+
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color:var(--ink);
+  background: url("/images/site/small_check.png") repeat; 
+}
+
+#wrapper{
+  max-width: 980px;
+  margin: 1rem auto;
+  background: var(--bg);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 4px solid #22d3ee; /* teal frame like mockup */
+}
+
+/* Header */
+#top-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 1rem 1rem 0.5rem;
+}
+#top-header .siteName a{ color:var(--ink); text-decoration:none; font-size:1.5rem; font-weight:700; }
+#top-header #tools a{ color:var(--muted); text-decoration:none; font-size:.9rem; }
+
+/* Navigation styling */
+nav{
+  background:#0f172a;
+  border-radius:8px;
+  margin:0 1rem 1rem;  
+}
+
+.nav-list{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:0;                      
+  margin:0;
+  padding:.5rem 0;  /* set my bar height */
+  list-style:none;
+}
+
+.nav-list li{ flex:1 1 0; }   /* setting the width of nav items */
+
+.nav-list a{
+  display:block;
+  text-align:center;
+  text-decoration:none;
+  color:#fff;
+  background:transparent;    
+  padding:.65rem 0;
+  border-radius:0;
+  font-size:clamp(.9rem, 2.5vw, 1rem); 
+}
+
+.nav-list a:hover{ background:rgba(255,255,255,.06); }
+.nav-list a:focus-visible{ outline:3px solid var(--brand); outline-offset:2px; }
+
+
+/* spacing */
+main{ padding: 0 1rem 1rem; }
+
+/* Headings */
+h1{ margin:.5rem 0 1rem; font-size:2.2rem; }
+h2{ margin:1rem 0 .5rem; }
+
+/* Hero */
+.hero{ display:grid; gap:1rem; align-items:center; margin-top:.5rem; }
+.hero-copy h2{ font-size:1.8rem; color:#0a6173;} 
+.hero-features{ margin:.5rem 0 1rem 0; color:#0a6173; font-weight:900; padding: 0; text-align: left; list-style: none;}
+.btn{ display:inline-block; padding:.6rem 1rem; border-radius:8px; text-decoration:none; font-weight:600; }
+.btn-primary{ background:#0ea5b7; color:var(--brand-ink); }
+.btn-primary:hover{ filter:brightness(1.05); }
+.hero-art img{ width:100%; height:auto; display:block; border-radius:8px; background:var(--panel); }
+
+/* Content: Reviews + Upgrades */
+.two-col{
+  display:grid;
+  gap:1.5rem;
+  margin-top:1rem;
+  grid-template-areas:
+    "reviews"
+    "upgrades";
+}
+.two-col > article{ grid-area: reviews; }
+.two-col > aside{   grid-area: upgrades; }
+.reviews{
+  margin: .75rem 0 0 1.25rem;      /* keep list indented */
+  padding: 0;
+  list-style: disc;                 /* normal bullets */
+}
+
+.reviews li{
+  line-height: 2.0;
+  margin-block: .55rem;             /* vertical space between items (mobile) */
+}
+
+/* colored bullets like the mock */
+.reviews li::marker{
+  color: #0ea5b7;                   /* teal accent */
+  font-size: 1.7em;                 /* slightly larger bullet */
+}
+/* Uniform teal tiles that align perfectly */
+.upgrade-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);   /* two per row on phones */
+  gap: .45rem;
+}
+
+@media (max-width: 360px){   /* I did this for very narrow views */
+  .upgrade-grid{ 
+    grid-template-columns: 1fr; 
+  }  
+}
+
+.upgrade-card{
+  text-align: center;
+  margin: 0;
+}
+/* the teal tile */
+.upgrade-thumb{
+  background: #0ea5b7;
+  border: 1px solid #cbd5e1;      /* thin gray border */
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  min-height: 120px;              /* tile height = uniform boxes */
+  padding: 6px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 8px 16px rgba(0,0,0,.08);
+}
+
+/* Make every picture the same visual size on mobile */
+.upgrade-card img{
+  height: 68px;                   /* <- uniform image size */
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.upgrade-card figcaption{ 
+  margin-top: .25rem; 
+}
+
+.upgrade-card a{ 
+  text-decoration: underline; 
+  color: #041f68; 
+  font-weight: 600; 
+}
+
+.upgrade-card:hover .upgrade-thumb,
+.upgrade-card:hover img{
+  transform: translateY(-1px);
+  transition: transform .15s ease;
+}
+
+/* Footer */
+footer{ padding:1rem; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem; }
+
+/* ===== Larger screens (single query) ===== */
+@media (min-width: 900px){
+  #wrapper{ margin:2rem auto; }
+
+  /* NAV: full-width dark bar, evenly spaced items */
+  nav{
+    background:#0f172a;
+    border-radius:8px;
+    margin:0 1rem 1rem;       /* use margin:0 for edge-to-edge inside #wrapper */
+  }
+  .nav-list{
+    display:flex;
+    gap:0;
+    margin:0;
+    padding:.6rem 0;          /* vertical padding for the bar */
+    justify-content:space-between;
+  }
+  .nav-list li{ flex:1; }
+  .nav-list a{
+    display:block;
+    text-align:center;
+    background:transparent;   /* remove mobile pill background */
+    padding:.6rem 0;
+  }
+  .nav-list a:hover{ background:rgba(255,255,255,.06); border-radius:6px; }
+
+  body{
+    background-image: url("/images/site/checkerboard.jpg");
+    background-repeat: repeat;
+    /* optional: control tile size if needed */
+    /* background-size: auto; */        /* default */
+    /* background-size: 64px 64px; */   /* try this if the pattern looks too big/small */
+  }
+
+  /* HERO: centered car with overlapping copy */
+  .hero{ position:relative; display:block; padding:.5rem 0 1.5rem; }
+  .hero-art img{
+    display:block;
+    margin:0 auto;
+    max-width:min(900px,92%);
+    height:auto;
+  }
+  .hero-copy{
+    position:absolute; z-index:1;
+    left:clamp(1.25rem,6vw,84px);
+    top: clamp(.75rem,5vw,56px);
+    max-width:360px;
+    background:rgba(255,255,255,.7);
+    -webkit-backdrop-filter:blur(2px);
+    backdrop-filter:blur(2px);
+    border-radius:8px;
+    padding:.75rem 1rem;
+  }
+
+  /* CONTENT: flip columns + type size */
+  .two-col{
+    grid-template-columns:1fr 1fr;
+    grid-template-areas:"upgrades reviews"; /* flipped */
+    align-items:start;
+    column-gap:1rem;
+  }
+  
+  .two-col > article h2,
+  .two-col > aside h2{ font-size:1.75rem; }
+  .reviews{ font-size:1.15rem; }
+  .reviews li{ line-height:1.7; margin-block:.8rem; }
+
+  /* left accent bar on reviews */
+  .two-col > article{ position:relative; }
+  .two-col > article::before{
+    content:"";
+    position:absolute;
+    left:-12px; top:.4rem; bottom:.4rem;
+    width:4px; background:#0ea5b7; border-radius:2px;
+  }
+
+  .upgrade-grid{ 
+    gap: .6rem; 
+    grid-template-columns: repeat(2, 1fr); 
+  }
+
+  .upgrade-thumb{
+    min-height: 100px;          /* taller tiles on desktop */
+  }
+
+  .upgrade-card img{
+    height: 84px;               /* slightly larger images */
+  }
+
+  /* CTA pop */
+  .btn-primary{ box-shadow:0 6px 16px rgba(0,0,0,.18); }
+}
+
