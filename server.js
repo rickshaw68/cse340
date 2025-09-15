@@ -13,6 +13,7 @@ const expressLayouts = require("express-ejs-layouts")
 const static = require("./routes/static") // only if assignment gave you this
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
+const utilities = require("./utilities/")
 
 const app = express()
 
@@ -27,9 +28,27 @@ app.set("layout", "./layouts/layout")
 /* ***********************
  * Routes
  *************************/
-app.use(static) // or app.use(express.static(path.join(__dirname, "public")))
-app.get("/", baseController.buildHome)
+app.use(static)
+app.get("/", utilities.handleErrors(baseController.buildHome))
 app.use("/inv", inventoryRoute)
+app.use(async (req, res, next) => {
+  next({status: 404, message: "Good news: You found the error page! Bad news: It's not what you were looking for"})
+})
+
+/* ***********************
+* Express Error Handler
+* Place after all other middleware
+*************************/
+app.use(async (err, req, res, next) => {
+  let nav = await utilities.getNav()
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  if(err.status == 404){ message = err.message } else { message = 'Oh no! There was a crash. Maybe try a different link?' }
+  res.render("errors/error", {
+    title: err.status || 'Server Error',
+    message,
+    nav
+  })
+})
 
 /* ***********************
  * Local Server Information
