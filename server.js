@@ -10,7 +10,7 @@ require("dotenv").config()
 const path = require("path")
 const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
-const static = require("./routes/static") // only if assignment gave you this
+const static = require("./routes/static") 
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
 const utilities = require("./utilities/")
@@ -40,7 +40,7 @@ app.use(async (req, res, next) => {
 * Place after all other middleware
 *************************/
 app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav()
+  let nav = await utilities.getNav(req)
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
   if(err.status == 404){ message = err.message } else { message = 'Oh no! There was a crash. Maybe try a different link?' }
   res.render("errors/error", {

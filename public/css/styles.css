@@ -224,7 +224,7 @@ h2{
 
 .reviews li{
   line-height: 2.0;
-  margin-block: .55rem;  /* add some verticle space between items on mobile screen */
+  margin-block: .55rem;  /* adding some verticle space between items on the mobile screen */
 }
 
 /* add colour to the bullets */
@@ -285,6 +285,61 @@ h2{
   transition: transform .15s ease;
 }
 
+/* single vehicle details page */
+
+.detail-page h1 {
+  margin: 1rem 0;
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+
+.vehicle-detail {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.vehicle-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.vehicle-info {
+  display: grid;
+  gap: 1rem;
+}
+
+.vehicle-price {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.vehicle-specs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.vehicle-specs li {
+  font-size: 1rem;
+}
+
+.vehicle-description h2 {
+  margin: 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.vehicle-description p {
+  line-height: 1.5;
+  color: #444;
+}
+
 /* Footer */
 footer{ 
   padding:1rem; 
@@ -333,7 +388,7 @@ footer{
   }
 
   #inv-display li {
-    margin-bottom: 0; /* grid spacing handles gaps */
+    margin-bottom: 0; /* grid spacing handles my gaps so bottom margin set to 0 */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
   }
@@ -422,6 +477,12 @@ footer{
  
   .btn-primary{ 
     box-shadow:0 6px 16px rgba(0,0,0,.18); 
+  }
+
+  /* vehicle detail page layout for larger screens */
+  .vehicle-detail {
+    grid-template-columns: 1.2fr 1fr; /* this is for a bigger image */
+    align-items: start;
   }
 }
 

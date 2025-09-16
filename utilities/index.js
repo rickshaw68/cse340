@@ -28,13 +28,15 @@ Util.buildClassificationGrid = async function(data){
     grid = '<ul id="inv-display">'
     data.forEach(vehicle => { 
       grid += '<li>'
-      grid +=  '<a href="../../inv/detail/'+ vehicle.inv_id 
-      + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
-      + 'details"><img src="' + vehicle.inv_thumbnail 
-      +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
-      +' on CSE Motors" /></a>'
+      grid +=  '<img src="' 
+        + vehicle.inv_thumbnail 
+        + '" alt="' 
+        + vehicle.inv_make 
+        + ' ' 
+        + vehicle.inv_model 
+        + ' thumbnail">'
       grid += '<div class="namePrice">'
-      grid += '<hr />'
+      grid += '<hr>'
       grid += '<h2>'
       grid += '<a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
       + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
@@ -50,6 +52,48 @@ Util.buildClassificationGrid = async function(data){
     grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>'
   }
   return grid
+}
+
+/* **********************************************
+ * Build the single vehicle detail view in HTML
+ * ********************************************** */
+Util.buildVehicleDetail = function (vehicle) {
+  const priceUSD = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(vehicle.inv_price)
+
+  const miles = vehicle.inv_miles != null
+    ? new Intl.NumberFormat("en-US").format(vehicle.inv_miles)
+    : "N/A"
+
+  return `
+    <section class="vehicle-detail">
+      <div class="vehicle-media">
+        <img src="${vehicle.inv_image}" alt="${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}, front and side view">
+
+        </div>
+        
+        <div class="vehicle-info">
+        <p class="vehicle-price"><span class="sr-only">Price: </span>${priceUSD}</p>
+
+        <ul class="vehicle-specs">
+          <li><strong>Year:</strong> ${vehicle.inv_year}</li>
+          <li><strong>Make:</strong> ${vehicle.inv_make}</li>
+          <li><strong>Model:</strong> ${vehicle.inv_model}</li>
+          <li><strong>Color:</strong> ${vehicle.inv_color || "N/A"}</li>
+          <li><strong>Mileage:</strong> ${miles}</li>
+          <li><strong>Classification:</strong> ${vehicle.classification_name || "N/A"}</li>
+        </ul>
+
+        <div class="vehicle-description">
+          <h2>About this vehicle</h2>
+          <p>${vehicle.inv_description || "No description available."}</p>
+        </div>
+      </div>
+    </section>
+        `
 }
 
 /* ****************************************
