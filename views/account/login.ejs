@@ -1,0 +1,23 @@
+<h1>Account Login</h1>
+<%- messages() %>
+
+<form method="post" action="/account/login" class="auth-form">
+    <label for="account_email">Email</label>
+    <input type="email" id="account_email" name="account_email" required autocomplete="email"/>
+
+    <label for="account_password">Password</label> 
+    <div class="pw-field">   
+    <input type="password" id="account_password" name="account_password" required minlength="12" autocomplete="new-password" pattern="(?=^.{12,}$)(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"/>
+    <!-- add in a see password toggle button -->
+    <button type="button" class="pw-toggle" aria-label="Show Password" aria-controls="account_password" aria-pressed="false">Show</button>
+    </div>
+    <p id="form-note" class="form-note">Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter and 1 special character</p>
+
+    <button type="submit">Login</button>
+</form>
+
+<p class="account-note">
+    No account? <a href="/account/register" aria-label="Create a new account">Sign-Up</a>
+</p>
+
+<script src="/js/forms.js" defer></script>

@@ -348,6 +348,201 @@ footer{
   font-size:.9rem; 
 }
 
+/* message formatting */
+#messages {
+  margin: 1rem 0;
+  padding: 0;
+  text-align: left;
+}
+
+#messages ul.notice {
+  margin: 0;
+  padding: 0;
+}
+
+/* each message item */
+#messages ul.notice li {
+  list-style: none;
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  display: inline-block;
+
+/* general notice style */
+  background: #eef6ff;
+  border: 1px solid #c2e0ff;
+  color: #8c0010;
+}
+
+#messages ul li {
+  list-style-type: none;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+#messages ul li::before {
+  content: "⚡";
+  left: 0;
+  color: inherit;
+}
+
+#messages ul li::after {
+  content: "⚡"
+}
+
+/* message types with color variations and emojis for future use*/
+
+/* #messages ul.error li   { background:#fff1f0; border:1px solid #ffa39e; color:#a8071a; }
+#messages ul.success li { background:#e6f7ed; border:1px solid #b7ebc6; color:#135200; }
+#messages ul.notice li  { background:#eef6ff; border:1px solid #c2e0ff; color:#003a8c; } 
+#messages ul.error li::before   { content: "❌ "; color: #a8071a; }
+#messages ul.success li::before { content: "✅ "; color: #135200; }
+#messages ul.notice li::before  { content: "⚡ "; color: #003a8c; }
+#messages ul.error li::after   { content: "❌ "; color: #a8071a; }
+#messages ul.success li::after { content: "✅ "; color: #135200; }
+#messages ul.notice li::after  { content: "⚡ "; color: #003a8c; } */
+
+.auth-form {
+  max-width: 28rem;
+  margin: 1rem auto;
+  padding: 1rem 1.25rem;
+  background: #012c90;
+  border: 1px solid #22d3ee;
+  border-radius: 12px;
+}
+
+.auth-form label {
+  display: block;
+  margin-top: 0.75rem;
+  font-weight: 600;
+  color: #f0fdfa;
+}
+
+.form-note {
+  font-size: 0.9rem;
+  color: #e0e7ff;  
+}
+
+.auth-form input {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+}
+
+.auth-form input:focus {
+  outline: 3px solid #cfe3ff;
+  outline-offset: 2px;
+  border-color: #4a90e2;
+}
+
+.auth-form button {
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  border: 0;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.auth-form .form-note {
+  text-align: left;
+  margin-top: 0.5rem;
+  display: block;
+  color: #e0e7ff;
+  font-size: 0.65rem;
+}
+
+.account-note {
+  max-width: 28rem;       
+  margin: 0.75rem auto 0; 
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--ink);     
+}
+
+.account-note a {
+  font-weight: bold;
+  text-decoration: underline;
+  color: #041f68;         
+}
+
+/* Password field: center the Show/Hide pill without changing input height */
+.auth-form .pw-field {
+  position: relative;                 /* anchor for absolute child */
+  margin-top: 0.25rem;
+}
+
+.auth-form .pw-field input {
+  width: 100%;
+  padding-right: 4.75rem;             /* room for the pill; adjust if needed */
+}
+
+/* Absolutely position the pill and center it vertically */
+.auth-form .pw-toggle {
+  position: absolute;
+  inset-block: 0;                     /* top:0; bottom:0; */
+  right: 0.65rem;                     /* distance from right edge */
+  margin-block: auto;                 /* centers vertically in the available block */
+  
+  display: inline-flex;               /* center text inside pill */
+  align-items: center;
+  justify-content: center;
+
+  height: 32px;                       /* pill size (doesn't affect input height) */
+  padding: 0 12px;
+  line-height: 1;
+  border: 0;
+  border-radius: 9999px;
+  background: #e5e7eb;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.auth-form .pw-toggle:focus-visible {
+  outline: 3px solid #cfe3ff;
+  outline-offset: 2px;
+}
+
+/* Hide Edge/IE built-in password reveal + clear buttons */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Validation icons for all inputs */
+input:required:invalid,
+input:focus:invalid {
+  background-image: url("/images/invalid.png");
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  background-position: right 0.5rem center;
+  padding-right: 2rem; /* enough space if no toggle */
+}
+
+input:required:valid {
+  background-image: url("/images/valid.png");
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  background-position: right 0.5rem center;
+  padding-right: 2rem;
+}
+
+/* Special case: password field inside .auth-form */
+.auth-form .pw-field input:required:invalid,
+.auth-form .pw-field input:focus:invalid {
+  background-position: right 4.25rem center; /* shift left to sit before pill */
+}
+
+.auth-form .pw-field input:required:valid {
+  background-position: right 4.25rem center;
+}
+
+
 /* ===== Larger screens & desktop view ===== */
 @media (min-width: 900px){
   #wrapper{ margin:2rem auto; }
