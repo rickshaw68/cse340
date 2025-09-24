@@ -1,0 +1,20 @@
+<section class="panel management-page">
+  <h1>Inventory Management</h1>
+
+  <% if (messages && messages.length) { %>
+    <div class="notice" role="status"><%= messages[0] %></div>
+  <% } %>
+
+  <% if (errors) { %>
+    <ul class="notice" role="alert">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <ul class="management-actions">
+    <li><a href="/inv/add-classification" class="btn">Add New Classification</a></li>
+    <li><a href="/inv/add-inventory" class="btn">Add New Inventory</a></li>
+  </ul>
+</section>

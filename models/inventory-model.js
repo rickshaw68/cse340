@@ -50,4 +50,40 @@ async function getVehicleById(inv_id) {
         return pool.query(sql, [inv_id])    
 }
 
-module.exports = {getClassifications, getInventoryByClassificationId, getVehicleById}
+/* *************************************
+ * inventory-model functions
+ * ************************************ */
+async function addClassification(classification_name) {
+    const sql = `INSERT INTO public.classification (classification_name)
+        VALUES ($1) RETURNING classification_id, classification_name`
+    const result = await pool.query(sql, [classification_name])
+    return result
+}
+
+/* *************************************
+ * add a new vehicle to inventory
+ * ************************************ */
+async function addInventory(v) {
+    const sql = `
+    INSERT INTO public.inventory
+    (inv_make, inv_model, inv_year, inv_price, inv_description, inv_image, inv_thumbnail, 
+    inv_miles, Inv_color, classification_id)     
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    RETURNING inv_id;`
+
+    const values = [
+        v.inv_make,
+        Number(v.inv_model) ? Number(v.inv_model) : v.inv_model,
+        Number(v.inv_year),
+        Number(v.inv_price),
+        v.inv_description,
+        v.inv_image,
+        v.inv_thumbnail,
+        Number(v.inv_miles),
+        v.inv_color,
+        Number(v.classification_id),
+    ]
+    return pool.query(sql, values)
+}
+
+module.exports = {getClassifications, getInventoryByClassificationId, getVehicleById, addClassification, addInventory}

@@ -29,3 +29,13 @@ UPDATE public.inventory
 SET
     inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
     inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/');
+
+-- Week 4 Assignment - Updating database to support case sensitivity uniqueness
+SELECT classification_name, COUNT(*)
+FROM public.classification
+GROUP BY 1
+HAVING COUNT(*) > 1;
+
+CREATE UNIQUE INDEX classification_name_lower_uindex
+  ON public.classification (LOWER(classification_name));
+

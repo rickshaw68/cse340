@@ -4,7 +4,7 @@
   --muted:#4b5563;        
   --bg:#ffffff;
   --panel:#f3f4f6;        
-  --brand:#2563eb;        
+  --brand:#012c90;        
   --brand-ink:black;    
   --border:#e5e7eb;       
   --radius:12px;
@@ -286,7 +286,6 @@ h2{
 }
 
 /* single vehicle details page */
-
 .detail-page h1 {
   margin: 1rem 0;
   font-size: 1.8rem;
@@ -396,13 +395,13 @@ footer{
 
 /* #messages ul.error li   { background:#fff1f0; border:1px solid #ffa39e; color:#a8071a; }
 #messages ul.success li { background:#e6f7ed; border:1px solid #b7ebc6; color:#135200; }
-#messages ul.notice li  { background:#eef6ff; border:1px solid #c2e0ff; color:#003a8c; } 
+#messages ul.notice li  { background:#eef6ff; border:1px solid #c2e0ff; color:#003a8c; } */
 #messages ul.error li::before   { content: "❌ "; color: #a8071a; }
 #messages ul.success li::before { content: "✅ "; color: #135200; }
 #messages ul.notice li::before  { content: "⚡ "; color: #003a8c; }
 #messages ul.error li::after   { content: "❌ "; color: #a8071a; }
 #messages ul.success li::after { content: "✅ "; color: #135200; }
-#messages ul.notice li::after  { content: "⚡ "; color: #003a8c; } */
+#messages ul.notice li::after  { content: "⚡ "; color: #003a8c; } 
 
 .auth-form {
   max-width: 28rem;
@@ -473,16 +472,15 @@ footer{
 
 /* Password field: center the Show/Hide pill without changing input height */
 .auth-form .pw-field {
-  position: relative;                 /* anchor for absolute child */
+  position: relative;                 
   margin-top: 0.25rem;
 }
 
 .auth-form .pw-field input {
   width: 100%;
-  padding-right: 4.75rem;             /* room for the pill; adjust if needed */
+  padding-right: 4.75rem;             
 }
 
-/* Absolutely position the pill and center it vertically */
 .auth-form .pw-toggle {
   position: absolute;
   inset-block: 0;                     /* top:0; bottom:0; */
@@ -542,6 +540,200 @@ input:required:valid {
   background-position: right 4.25rem center;
 }
 
+/* form styling section */
+.form-page {
+  max-width: 760px;
+  margin-inline: auto;
+  margin-block: 1.25rem 2.5rem;
+  padding: 1.25rem;
+  background: var(--panel);
+  border: 1px solid rgba(31, 41, 55, 0.06); 
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(31, 41, 55, 0.06);
+}
+
+.form-page h1 {
+  font-size: clamp(1.25rem, 1.1rem + 1vw, 1.6rem);
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+/* fields */
+.form-field {
+  display: grid;
+  gap: .5rem;
+  margin-block: 1rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: .65rem .8rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  line-height: 1.35;
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+
+.form-field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .25); /* brand glow */
+}
+
+.form-field input:invalid,
+.form-field select:invalid,
+.form-field textarea:invalid {
+  border-color: #ef4444; /* red-500 */
+}
+
+.form-note {
+  color: var(--ink);
+  font-size: .85rem;
+}
+
+/* notices (flash + validation lists) */
+.notice {
+  border-radius: 10px;
+  padding: .75rem .9rem;
+  margin-block: .75rem 1rem;
+  background: #f3f4f6; /* gray-100 */
+  color: var(--ink);
+  border: 1px solid #e5e7eb;
+}
+
+.notice[role="alert"] {
+  background: #fef2f2; /* red-50 */
+  border-color: #fecaca; /* red-200 */
+  color: #7f1d1d; /* red-900 */
+}
+
+.notice[role="status"] {
+  background: #ecfdf5; /* emerald-50 */
+  border-color: #a7f3d0; /* emerald-200 */
+  color: #065f46; /* emerald-900 */
+}
+
+.notice li { margin-left: 1.25rem; }
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .7rem 1rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .06s ease, box-shadow .15s ease, background-color .15s ease;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, .25);
+}
+
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn:focus-visible { outline: 3px solid rgba(37, 99, 235, .35); outline-offset: 2px; }
+
+.management-actions {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: .75rem;
+  margin-top: 1rem;
+}
+
+body{
+  background:
+    radial-gradient(1200px 800px at 10% -200px, rgba(0,0,0,0.03), transparent),
+    radial-gradient(900px 700px at 100% 120%, rgba(0,0,0,0.035), transparent),
+    var(--bg, #ffffff);   /* fallback color */
+  color: var(--ink, #111827);
+}
+
+main {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding: clamp(12px, 2vw, 24px);
+  min-height: 70vh;
+}
+
+/* Consistent vertical rhythm between blocks */
+main > * + * { margin-top: clamp(12px, 2vw, 20px); }
+
+/* Match management cards to form cards */
+.panel {
+  background: var(--panel);
+  border: 1px solid rgba(31, 41, 55, 0.06);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 6px 20px rgba(31, 41, 55, 0.06);
+}
+
+/* Headings look a bit crisper */
+.panel h1,
+.form-page h1 {
+  margin: 0 0 .75rem 0;
+  line-height: 1.2;
+}
+
+/* Optional: tidy lists in panels */
+.panel ul { margin: .5rem 0 0 1.25rem; }
+
+/* Optional: make links inside panels feel intentional */
+.panel a:not(.btn) {
+  text-decoration: none;
+  border-bottom: 1px solid rgba(31, 41, 55, 0.15);
+}
+.panel a:not(.btn):hover {
+  border-bottom-color: rgba(31, 41, 55, 0.35);
+}
+
+/* Inventory Management layout */
+.management-page {
+  text-align: center;
+  padding-block: 1rem 1.5rem;
+}
+
+.management-page h1 {
+  margin: 0 0 1rem 0;
+}
+
+.management-actions {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: flex;
+  justify-content: center;   /* center the buttons horizontally */
+  align-items: center;
+  gap: 1rem;                 /* space between buttons */
+  flex-wrap: wrap;           /* stack on small screens */
+}
+
+.management-actions li { margin: 0; }
+
+.management-actions .btn {
+  min-width: 220px;          /* keeps buttons same width */
+}
 
 /* ===== Larger screens & desktop view ===== */
 @media (min-width: 900px){
@@ -679,5 +871,28 @@ input:required:valid {
     grid-template-columns: 1.2fr 1fr; /* this is for a bigger image */
     align-items: start;
   }
+
+  .management-actions { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .form-page { padding: 1.5rem 1.75rem; }
 }
+
+/* refine selects to match inputs */
+.form-field select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #9ca3af 50%),
+    linear-gradient(135deg, #9ca3af 50%, transparent 50%),
+    linear-gradient(to right, #e5e7eb, #e5e7eb);
+  background-position:
+    calc(100% - 18px) center,
+    calc(100% - 12px) center,
+    calc(100% - 2.25rem) center;
+  background-size: 6px 6px, 6px 6px, 1px 60%;
+  background-repeat: no-repeat;
+  padding-right: 2.25rem;
+}
+
+
+
 

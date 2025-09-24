@@ -1,0 +1,38 @@
+<section class="form-page">
+  <h1>Add Classification</h1>
+
+  <% if (messages && messages.length) { %>
+    <div class="notice" role="status"><%= messages[0] %></div>
+  <% } %>
+
+  <% if (errors) { %>
+    <ul class="notice" role="alert">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <form id="add-classification-form" action="/inv/add-classification" method="post">
+  <div class="form-field">
+    <label for="classification_name">Classification Name</label>
+    <input
+      id="classification_name"
+      name="classification_name"
+      type="text"
+      required
+      minlength="1"
+      maxlength="30"
+      pattern="^[A-Za-z0-9]+$"
+      aria-describedby="classification-help"
+      value="<%= typeof classification_name !== 'undefined' ? classification_name : '' %>"
+    />
+    <small id="classification-help" class="form-note">
+      Letters and numbers only — <strong>no spaces or special characters</strong>.
+    </small>
+  </div>
+
+  <button type="submit" class="btn">Add Classification</button>
+</form>
+
+</section>

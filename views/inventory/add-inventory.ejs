@@ -1,0 +1,171 @@
+<section class="form-page">
+  <h1>Add Vehicle</h1>
+
+  <% if (messages && messages.length) { %>
+    <div class="notice" role="status"><%= messages[0] %></div>
+  <% } %>
+
+  <% if (errors) { %>
+    <ul class="notice" role="alert">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <form id="add-inventory-form" action="/inv/add-inventory" method="post" >
+    <!-- Classification -->
+    <div class="form-field">
+      <label for="classification_id">Classification</label>
+      <select id="classification_id" name="classification_id" required>
+        <option value="">— Select a classification —</option>
+        <% (classifications || []).forEach(c => { %>
+          <option
+            value="<%= c.classification_id %>"
+            <%= (Number(classification_id) === Number(c.classification_id)) ? "selected" : "" %>>
+            <%= c.classification_name %>
+          </option>
+        <% }) %>
+      </select>
+      <small class="form-note">Required.</small>
+    </div>
+
+    <!-- Make -->
+    <div class="form-field">
+      <label for="inv_make">Make</label>
+      <input
+        id="inv_make"
+        name="inv_make"
+        type="text"
+        required
+        minlength="1"
+        maxlength="50"
+        pattern="^[A-Za-z0-9 ]+$"
+        value="<%= typeof inv_make !== 'undefined' ? inv_make : '' %>"
+        aria-describedby="make-help" />
+      <small id="make-help" class="form-note">Letters, numbers, spaces only.</small>
+    </div>
+
+    <!-- Model -->
+    <div class="form-field">
+      <label for="inv_model">Model</label>
+      <input
+        id="inv_model"
+        name="inv_model"
+        type="text"
+        required
+        minlength="1"
+        maxlength="50"
+        pattern="^[A-Za-z0-9 ]+$"
+        value="<%= typeof inv_model !== 'undefined' ? inv_model : '' %>"
+        aria-describedby="model-help" />
+      <small id="model-help" class="form-note">Letters, numbers, spaces only.</small>
+    </div>
+
+    <!-- Year -->
+    <div class="form-field">
+      <label for="inv_year">Year</label>
+      <input
+        id="inv_year"
+        name="inv_year"
+        type="number"
+        inputmode="numeric"
+        required
+        min="1900"
+        max="2100"
+        step="1"
+        value="<%= typeof inv_year !== 'undefined' ? inv_year : '' %>"
+        aria-describedby="year-help" />
+      <small id="year-help" class="form-note">4-digit year (1900–2100).</small>
+    </div>
+
+    <!-- Price -->
+    <div class="form-field">
+      <label for="inv_price">Price (USD)</label>
+      <input
+        id="inv_price"
+        name="inv_price"
+        type="number"
+        inputmode="decimal"
+        required
+        min="0"
+        step="0.01"
+        value="<%= typeof inv_price !== 'undefined' ? inv_price : '' %>"
+        aria-describedby="price-help" />
+      <small id="price-help" class="form-note">Positive number; cents allowed.</small>
+    </div>
+
+    <!-- Miles -->
+    <div class="form-field">
+      <label for="inv_miles">Miles</label>
+      <input
+        id="inv_miles"
+        name="inv_miles"
+        type="number"
+        inputmode="numeric"
+        required
+        min="0"
+        step="1"
+        value="<%= typeof inv_miles !== 'undefined' ? inv_miles : '' %>"
+        aria-describedby="miles-help" />
+      <small id="miles-help" class="form-note">Non-negative integer.</small>
+    </div>
+
+    <!-- Color -->
+    <div class="form-field">
+      <label for="inv_color">Color</label>
+      <input
+        id="inv_color"
+        name="inv_color"
+        type="text"
+        required
+        minlength="1"
+        maxlength="30"
+        pattern="^[A-Za-z ]+$"
+        value="<%= typeof inv_color !== 'undefined' ? inv_color : '' %>"
+        aria-describedby="color-help" />
+      <small id="color-help" class="form-note">Letters and spaces only.</small>
+    </div>
+
+    <!-- Image paths -->
+    <div class="form-field">
+      <label for="inv_image">Main Image Path</label>
+      <input
+        id="inv_image"
+        name="inv_image"
+        type="text"
+        required
+        maxlength="255"
+        value="<%= typeof inv_image !== 'undefined' ? inv_image : '' %>"
+        aria-describedby="image-help" />
+      <small id="image-help" class="form-note">e.g., <code>/images/vehicles/suv.webp</code></small>
+    </div>
+
+    <div class="form-field">
+      <label for="inv_thumbnail">Thumbnail Image Path</label>
+      <input
+        id="inv_thumbnail"
+        name="inv_thumbnail"
+        type="text"
+        required
+        maxlength="255"
+        value="<%= typeof inv_thumbnail !== 'undefined' ? inv_thumbnail : '' %>"
+        aria-describedby="thumb-help" />
+      <small id="thumb-help" class="form-note">e.g., <code>/images/vehicles/suv-tn.webp</code></small>
+    </div>
+
+    <div class="form-field">
+      <label for="inv_description">Description</label>
+      <textarea
+        id="inv_description"
+        name="inv_description"
+        required
+        minlength="10"
+        maxlength="2000"
+        aria-describedby="desc-help"><%= typeof inv_description !== 'undefined' ? inv_description : '' %></textarea>
+      <small id="desc-help" class="form-note">Brief description (10–2000 chars).</small>
+    </div>
+
+    <button type="submit" class="btn">Add Vehicle</button>
+  </form>
+</section>
