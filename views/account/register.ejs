@@ -9,17 +9,17 @@
 
 <form method="post" action="/account/register" class="auth-form">
     <label for="account_firstname">First Name</label>
-    <input type="text" id="account_firstname" name="account_firstname" required autocomplete="given-name" />
+    <input type="text" id="account_firstname" name="account_firstname" required autocomplete="given-name" value="<%= locals.account_firstname %>">
 
     <label for="account_lastname">Last Name</label>
-    <input type="text" id="account_lastname" name="account_lastname" required autocomplete="family-name" />
+    <input type="text" id="account_lastname" name="account_lastname" required autocomplete="family-name" value="<%= locals.account_lastname %>">
     
     <label for="account_email">Email</label>
-    <input type="email" id="account_email" name="account_email" required autocomplete="email"/>
+    <input type="email" id="account_email" name="account_email" required autocomplete="email" value="<%= locals.account_email %>">
 
     <label for="account_password">Password</label> 
     <div class="pw-field">   
-    <input type="password" id="account_password" name="account_password" required minlength="12" autocomplete="new-password" pattern="(?=^.{12,}$)(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"/>
+    <input type="password" id="account_password" name="account_password" required minlength="12" autocomplete="new-password" pattern="(?=^.{12,}$)(?=.*\d)(?=.*\W+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$">
     <!-- add in a see password toggle button -->
     <button type="button" class="pw-toggle" aria-label="Show Password" aria-controls="account_password" aria-pressed="false">Show</button>
     </div>

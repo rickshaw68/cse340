@@ -20,7 +20,7 @@ router.post(
 
 // Temp for login processing rather than 404 error
 router.post("/login", (req, res) => {
-  req.flash("notice", "Login isn’t set up yet. Please try again later.");
+  req.flash("notice", "Login isn't set up yet. Please try again later.");
   return res.redirect(303, "/account/login");
 });
 
