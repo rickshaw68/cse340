@@ -6,10 +6,10 @@ const accountController = require("../controllers/accountController")
 const utilities = require("../utilities/")
 
 // Route to build account management view
-router.get("/", (req, res) => res.redirect("/account/login"))
+router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildManagement))
 router.get("/login", utilities.handleErrors(accountController.buildLogin))
 router.get("/register", utilities.handleErrors(accountController.buildRegister))
-router.get("/management", utilities.handleErrors(accountController.buildManagement))
+router.get("/management", utilities.checkLogin, utilities.handleErrors(accountController.buildManagement))
 // Process the registration data
 router.post(
   "/register",
@@ -18,11 +18,12 @@ router.post(
   utilities.handleErrors(accountController.registerAccount)
 )
 
-// Temp for login processing rather than 404 error
-router.post("/login", (req, res) => {
-  req.flash("notice", "Login isn't set up yet. Please try again later.");
-  return res.redirect(303, "/account/login");
-});
-
+// Process the login data
+router.post(
+  "/login", 
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
+  utilities.handleErrors(accountController.accountLogin)
+)
 
 module.exports = router

@@ -86,4 +86,56 @@ async function addInventory(v) {
     return pool.query(sql, values)
 }
 
-module.exports = {getClassifications, getInventoryByClassificationId, getVehicleById, addClassification, addInventory}
+/* ***************************
+ *  Update Inventory Data
+ * ************************** */
+async function updateInventory(
+  inv_id,
+  inv_make,
+  inv_model,
+  inv_description,
+  inv_image,
+  inv_thumbnail,
+  inv_price,
+  inv_year,
+  inv_miles,
+  inv_color,
+  classification_id
+) {
+  try {
+    const sql = `
+      UPDATE public.inventory
+         SET inv_make = $2,
+             inv_model = $3,
+             inv_description = $4,
+             inv_image = $5,
+             inv_thumbnail = $6,
+             inv_price = $7,
+             inv_year = $8,
+             inv_miles = $9,
+             inv_color = $10,
+             classification_id = $11
+       WHERE inv_id = $1
+       RETURNING inv_id, inv_make, inv_model
+    `
+    const params = [
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      classification_id,
+    ]
+    return pool.query(sql, params)
+  } catch (error) {
+    console.error("model error: " + error)
+    throw error
+  }
+}
+
+module.exports = {getClassifications, getInventoryByClassificationId, getVehicleById, addClassification, addInventory, updateInventory}

@@ -17,4 +17,23 @@
     <li><a href="/inv/add-classification" class="btn">Add New Classification</a></li>
     <li><a href="/inv/add-inventory" class="btn">Add New Inventory</a></li>
   </ul>
+
+  <h2 class="section-title">Manage Inventory</h2>
+  <p class="section-desc">Select a classification to see its inventory items.</p>
+
+  <div class="form-field filter-inline">
+    <label for="classificationList">Classification</label>
+    <div class="select-wrap">
+      <%- classificationSelect %>
+    </div>
+  </div>
+
+
+  <table id="inventoryDisplay"></table>
+
+  <noscript>JavaScript must be enabled to use this page.</noscript>
+
 </section>
+
+<script src="../../js/inventory.js"></script>
+

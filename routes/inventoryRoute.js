@@ -28,4 +28,26 @@ router.get("/type/:classificationId", utilities.handleErrors(invController.build
 router.get("/detail/:inv_id", utilities.handleErrors(invController.buildByInvId))
 router.get("/trigger-error", utilities.handleErrors(invController.triggerServerError))
 
+// Return inventory for a classification as JSON
+router.get(
+  "/getInventory/:classification_id",
+  utilities.handleErrors(invController.getInventoryJSON)
+)
+
+// Add inventory view
+router.get(
+  "/edit/:inv_id",
+  utilities.checkLogin, 
+  utilities.handleErrors(invController.buildEditInventory)
+)
+
+// Process the update inventory
+router.post(
+  "/update",
+  utilities.checkLogin,
+  invValidate.inventoryRules(),
+  invValidate.checkUpdateData,
+  utilities.handleErrors(invController.updateInventory)
+)
+
 module.exports = router

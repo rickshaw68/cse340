@@ -1,5 +1,7 @@
 const invModel = require("../models/inventory-model")
 const Util = {}
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 
 /* **********************************************
  * Constructs the nav HTML unordered list
@@ -72,12 +74,10 @@ Util.buildVehicleDetail = function (vehicle) {
     <section class="vehicle-detail">
       <div class="vehicle-media">
         <img src="${vehicle.inv_image}" alt="${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}, front and side view">
+      </div>
 
-        </div>
-        
-        <div class="vehicle-info">
+      <div class="vehicle-info">
         <p class="vehicle-price"><span class="sr-only">Price: </span>${priceUSD}</p>
-
         <ul class="vehicle-specs">
           <li><strong>Year:</strong> ${vehicle.inv_year}</li>
           <li><strong>Make:</strong> ${vehicle.inv_make}</li>
@@ -86,14 +86,67 @@ Util.buildVehicleDetail = function (vehicle) {
           <li><strong>Mileage:</strong> ${miles}</li>
           <li><strong>Classification:</strong> ${vehicle.classification_name || "N/A"}</li>
         </ul>
-
         <div class="vehicle-description">
           <h2>About this vehicle</h2>
           <p>${vehicle.inv_description || "No description available."}</p>
         </div>
       </div>
     </section>
-        `
+  `
+}
+
+/* **********************************************
+ * buildClassificationList function
+ * added because the I didn't already have a helper function for this
+ * ********************************************** */
+Util.buildClassificationList = async function (classification_id = null) {
+  const data = await invModel.getClassifications()
+
+  let list = '<select id="classificationList" name="classification_id" required>'
+  list += '<option value="">Choose a Classification</option>'
+
+  data.rows.forEach((row) => {
+    const selected = String(row.classification_id) === String(classification_id) ? ' selected' : ''
+    list += `<option value="${row.classification_id}"${selected}>${row.classification_name}</option>`
+  })
+
+  list += '</select>'
+  return list
+}
+
+/* ****************************************
+* Middleware to check token validity
+**************************************** */
+Util.checkJWToken = (req, res, next) => {
+  if (req.cookies.jwt) {
+    jwt.verify(
+      req.cookies.jwt,
+      process.env.ACCESS_TOKEN_SECRET,
+      function (err, accountData) {
+        if (err) {
+          req.flash("notice", "Please log in")
+          res.clearCookie("jwt")
+          return res.redirect("/account/login")
+        }
+        res.locals.accountData = accountData
+        res.locals.loggedin = 1
+        next()
+      })
+  } else {
+    next()
+  }
+}
+
+/* ****************************************
+ *  Check Login
+ * ************************************ */
+Util.checkLogin = (req, res, next) => {
+  if (res.locals.loggedin) {
+    next()
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
 }
 
 /* ****************************************

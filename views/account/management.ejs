@@ -1,0 +1,23 @@
+<% /* views/account/management.ejs */ %>
+<section class="account">
+  <h1>Account Management</h1>
+
+  <% if (typeof messages === "function") { %>
+    <div class="flash"><%- messages() %></div>
+  <% } %>
+
+  <% if (errors && errors.length) { %>
+    <ul class="form-errors">
+      <% errors.forEach(e => { %><li><%= e.msg %></li><% }) %>
+    </ul>
+  <% } %>
+
+  <p>You're logged in.</p>
+  <% if (accountData) { %>
+    <p>Welcome, <%= accountData.account_firstname %>!</p>
+  <% } %>
+
+  <p class="management-links">
+    <a href="/inv">Go to Inventory Management</a>
+  </p>
+</section>
