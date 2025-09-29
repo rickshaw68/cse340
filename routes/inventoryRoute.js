@@ -50,4 +50,11 @@ router.post(
   utilities.handleErrors(invController.updateInventory)
 )
 
+// protecting the inventory management page (no access without login)
+router.get(
+  "/",
+  utilities.checkLogin,
+  utilities.handleErrors(invController.buildManagement)
+)
+
 module.exports = router
