@@ -6,7 +6,7 @@ const utilities = require("../utilities/")
 const invValidate = require("../utilities/inventory-validation")
 
 // Inventory Management Dashboard
-router.get("/", utilities.handleErrors(invController.buildManagement))
+router.get("/", utilities.checkLogin, utilities.handleErrors(invController.buildManagement))
 router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification))
 router.post(
     "/add-classification",
@@ -48,13 +48,6 @@ router.post(
   invValidate.inventoryRules(),
   invValidate.checkUpdateData,
   utilities.handleErrors(invController.updateInventory)
-)
-
-// protecting the inventory management page (no access without login)
-router.get(
-  "/",
-  utilities.checkLogin,
-  utilities.handleErrors(invController.buildManagement)
 )
 
 module.exports = router
