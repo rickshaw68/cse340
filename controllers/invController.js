@@ -367,6 +367,79 @@ invCont.updateInventory = async function (req, res, next) {
   }
 }
 
+/* ***************************
+ *  Build & deliver Delete Confirmation view
+ * ************************** */
+invCont.buildDeleteConfirm = async function (req, res, next) {
+  try {
+    const inv_id = parseInt(req.params.inv_id, 10)
+    if (Number.isNaN(inv_id)) {
+      return next(new Error("Invalid inventory id"))
+    }
+
+    const nav = await utilities.getNav(req)
+    const messages = req.flash ? req.flash("notice") : []
+
+    const data = await invModel.getVehicleById(inv_id)
+    if (!data.rows || data.rows.length === 0) {
+      return next(new Error("Vehicle not found"))
+    }
+    const vehicle = data.rows[0]
+    const name = `${vehicle.inv_make} ${vehicle.inv_model}`
+    return res.render("inventory/delete-confirm", {
+      title: `Delete ${name}`,
+      nav,
+      messages,
+      errors: null,
+      item: {
+        inv_id: vehicle.inv_id,
+        inv_make: vehicle.inv_make,
+        inv_model: vehicle.inv_model,
+        inv_year: vehicle.inv_year,
+        inv_price: vehicle.inv_price,
+      },
+    })
+  } catch (err) {
+    return next(err)
+  }
+}
+
+/* ***************************
+ *  Complete Delete Inventory
+ * ************************** */
+invCont.deleteInventoryItem = async function (req, res, next) {
+  try {
+    // step 1
+    const inv_id = parseInt(req.body.inv_id, 10)
+    if (Number.isNaN(inv_id)) {
+      if (req.flash) req.flash("notice", "Invalid inventory id.")
+      return res.redirect("/inv")
+    }
+
+    // step 2
+    const delResult = await invModel.deleteInventory(inv_id)
+
+    // step 3
+    const ok =
+      delResult &&
+      (delResult.rowCount > 0 ||
+        delResult.success === true ||
+        (Array.isArray(delResult.rows) && delResult.rows.length > 0))
+
+    // step 4
+    if (ok) {
+      if (req.flash) req.flash("notice", "Vehicle deleted.")
+      return res.redirect("/inv")
+    } else {
+      if (req.flash) req.flash("notice", "Delete failed.")
+      return res.redirect(`/inv/delete/${inv_id}`)
+    }
+  } catch (err) {
+    if (req.flash) req.flash("notice", "Delete failed.")
+    const id = parseInt(req.body.inv_id, 10)
+    return res.redirect(`/inv/delete/${id || ""}`)
+  }
+}
 
 /* ***************************
  *  Intentional trigger for a 500 error

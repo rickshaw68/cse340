@@ -1,6 +1,13 @@
 <section class="panel management-page">
   <h1>Inventory Management</h1>
 
+    <% if (accountData) { %>
+      <p class="greeting">Welcome, <%= accountData.account_firstname %></p>
+      <% if (accountData.account_type !== 'Client') { %>
+        <h2>Administration</h2>
+      <% } %>
+    <% } %>
+
   <% if (messages && messages.length) { %>
     <div class="notice" role="status"><%= messages[0] %></div>
   <% } %>

@@ -9,6 +9,8 @@
   --border:#e5e7eb;       
   --radius:12px;
   --shadow:0 0 0 1px rgba(0,0,0,.04), 0 10px 20px rgba(0,0,0,.06);
+  --brand-blue: #012c90;
+  --brand-blue-hover: #001f6b;
 }
 
 *{ box-sizing:border-box }
@@ -824,6 +826,82 @@ main > * + * { margin-top: clamp(12px, 2vw, 20px); }
   outline: none;
   border-color: var(--brand);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, .25);
+}
+
+/* Header layout polish */
+#top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .75rem 1rem;
+}
+
+#top-header .util-nav ul {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Welcome pill */
+#top-header .welcome-badge {
+  display: inline-block;
+  padding: .35rem .6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  background: rgba(0,0,0,.06);
+  color: #fff !important;
+}
+
+/* Buttons */
+#top-header .btn {
+  display: inline-block;
+  padding: .5rem 1rem;
+  border-radius: .6rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  border: 1px solid transparent;
+  box-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
+
+/* Use same style for login + logout */
+#top-header .btn--login,
+#top-header .btn--logout {
+  background: var(--brand-blue);
+  border-color: var(--brand-blue);
+  color: #fff !important;
+}
+
+/* Ensure visited state stays white text */
+#top-header .btn--login:visited,
+#top-header .btn--logout:visited {
+  color: #fff !important;
+}
+
+/* Hover / focus */
+#top-header .btn--login:hover,
+#top-header .btn--logout:hover {
+  background: var(--brand-blue-hover);
+  border-color: var(--brand-blue-hover);
+  filter: none;
+}
+
+#top-header .btn--login:focus-visible,
+#top-header .btn--logout:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Accessibility: keyboard focus */
+#top-header a:focus-visible,
+#top-header .btn:focus-visible,
+#top-header .welcome-badge:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 /* ===== Larger screens & desktop view ===== */

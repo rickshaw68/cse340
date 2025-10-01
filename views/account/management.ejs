@@ -12,12 +12,26 @@
     </ul>
   <% } %>
 
-  <p>You're logged in.</p>
-  <% if (accountData) { %>
-    <p>Welcome, <%= accountData.account_firstname %>!</p>
+  <% if (accountData) { %>    
+  <% if (accountData.account_type === 'Employee' || accountData.account_type === 'Admin') { %>
+    <h2>Welcome <%= accountData.account_firstname %></h2>
+  <% } else { %>
+    <!-- client loging does not get <h2> in the DOM -->
+    <p>Welcome <%= accountData.account_firstname %></p>
   <% } %>
 
-  <p class="management-links">
-    <a href="/inv">Go to Inventory Management</a>
+  <p class="update-link">
+    <a class="btn" href="/account/update/<%= accountData.account_id %>">Update account information</a>
   </p>
+
+  <% if (accountData.account_type === 'Employee' || accountData.account_type === 'Admin') { %>
+    <h3>Inventory Management</h3>
+    <p class="management-links">
+      <a class="btn" href="/inv">Go to Inventory Management</a>
+    </p>
+  <% } %>
+<% } else { %>
+  <p>You're not logged in. <a href="/account/login">Log in</a></p>
+<% } %>
+
 </section>

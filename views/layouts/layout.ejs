@@ -3,6 +3,10 @@
     <%- include('../partials/head') %>
     <body>
         <div id="wrapper">
+            <% if (typeof messages === "function") { %>
+            <%- messages() %>
+            <% } %>
+
             <%- include('../partials/header') %>
             <%- include('../partials/navigation') %>
 

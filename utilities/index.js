@@ -118,6 +118,8 @@ Util.buildClassificationList = async function (classification_id = null) {
 * Middleware to check token validity
 **************************************** */
 Util.checkJWToken = (req, res, next) => {
+  res.locals.loggedin = false
+  res.locals.accountData = null
   if (req.cookies.jwt) {
     jwt.verify(
       req.cookies.jwt,
@@ -129,7 +131,7 @@ Util.checkJWToken = (req, res, next) => {
           return res.redirect("/account/login")
         }
         res.locals.accountData = accountData
-        res.locals.loggedin = 1
+        res.locals.loggedin = true
         next()
       })
   } else {
@@ -147,6 +149,23 @@ Util.checkLogin = (req, res, next) => {
     req.flash("notice", "Please log in.")
     return res.redirect("/account/login")
   }
+}
+
+/* ****************************************
+ *  Check role: Employee or Admin
+ * *************************************** */
+Util.checkEmployeeOrAdmin = (req, res, next) => {
+  const loggedin = !!res.locals.loggedin
+  const type = res.locals.accountData?.account_type
+  if (!loggedin) {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+  if (type === "Employee" || type === "Admin") {
+    return next()
+  }
+  req.flash("notice", "You do not have permission to access that page")
+  return res.redirect("/account/login")
 }
 
 /* ****************************************

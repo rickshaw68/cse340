@@ -13,6 +13,16 @@ async function buildLogin(req, res, next) {
     })
 }
 
+/* adding base cookie for troubleshooting */
+const baseCookie = {
+  httpOnly: true,
+  sameSite: "lax",
+  path: "/",
+}
+if (process.env.NODE_ENV !== "development") {
+  baseCookie.secure = true
+}
+
 /* ****************************************
 *  Deliver registration view
 * *************************************** */
@@ -45,7 +55,6 @@ async function registerAccount(req, res) {
       errors: null,
     })
   }
-
 
   const regResult = await accountModel.registerAccount(
     account_firstname,
@@ -102,11 +111,9 @@ async function accountLogin(req, res) {
     if (await bcrypt.compare(account_password, accountData.account_password)) {
       delete accountData.account_password
       const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 })
-      if(process.env.NODE_ENV === 'development') {
-        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
-      } else {
-        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
-      }
+      
+      res.cookie("jwt", accessToken, { ...baseCookie, httpOnly: true, maxAge: 3600 * 1000 })
+      
       return res.redirect("/account/")
     }
     else {
@@ -115,13 +122,132 @@ async function accountLogin(req, res) {
         title: "Login",
         nav,
         errors: null,
-        account
+        account_email
       })
     }
   } catch (error) {      
       throw new Error('Access Forbidden')
   }
 }
- 
 
-module.exports = { buildLogin, buildRegister, registerAccount, buildManagement, accountLogin }
+/* *************************************
+ * Process logout
+ ************************************* */
+async function logout(req, res, next) {
+  try {
+    if (req.flash) req.flash("notice", "You are now logged out.")
+    res.clearCookie("jwt", baseCookie) 
+    return res.redirect("/")   
+  } catch (err) {
+    return next(err)
+  }
+}
+
+/* *************************************
+ * Account update view
+ ************************************* */
+
+async function buildUpdate(req, res, next) {
+  const nav = await utilities.getNav(req)
+  const account_id = parseInt(req.params.account_id, 10)
+  if (Number.isNaN(account_id)) return next(new Error("Invalid account id"))
+  return res.render("account/update", {
+  title: "Update Account",
+  nav,
+  errors: null,
+  account: res.locals.accountData,
+  })
+}
+
+/* *************************************
+ * process the account update
+ ************************************* */
+async function updateAccount(req, res, next) {
+  const nav = await utilities.getNav(req)
+  const { account_id, account_firstname, account_lastname, account_email } = req.body
+  try {
+    const result = await accountModel.updateAccount(
+      Number(account_id),
+      account_firstname,
+      account_lastname,
+      account_email
+    )
+    if (result?.rowCount === 1) {
+      const updated = result.rows[0]
+      const payload = {
+        account_id: updated.account_id,
+        account_firstname: updated.account_firstname,
+        account_lastname: updated.account_lastname,
+        account_email: updated.account_email,
+        account_type: updated.account_type,
+      }
+      const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 })
+      res.cookie("jwt", token, { ...baseCookie, maxAge: 3600 * 1000 })
+      if (req.flash) req.flash("notice", "Account information updated")
+      return res.redirect("/account")
+    }
+    // adding a fallback in case the update fails
+     if (req.flash) req.flash("notice", "Update failed. Please try again.")
+    return res.status(400).render("account/update", {
+      title: "Update Account",
+      nav,
+      errors: null,
+      account: res.locals.accountData,
+      account_firstname,
+      account_lastname,
+      account_email,
+    })
+  } catch (err) {
+    // Handle duplicate email
+    const msg = err?.code === "23505"
+      ? "That email is already in use. Please use a different email."
+      : "There was an error updating your account."
+
+    if (req.flash) req.flash("notice", msg)
+    return res.status(400).render("account/update", {
+      title: "Update Account",
+      nav,
+      errors: null,
+      account: res.locals.accountData,
+      account_firstname,
+      account_lastname,
+      account_email,
+    })
+  }
+}
+
+/* *************************************
+ * process the password update
+ ************************************* */
+async function updatePassword(req, res, next) {
+  const nav = await utilities.getNav(req)
+  const { account_id, account_password } = req.body
+
+  try {
+    const hash = await bcrypt.hash(account_password, 10)
+    const result = await accountModel.updatePassword(Number(account_id), hash)
+
+    if (result?.rowCount === 1) {
+      if (req.flash) req.flash("notice", "Password updated.")
+      return res.redirect("/account")
+    }
+
+    if (req.flash) req.flash("notice", "Password update failed. Please try again.")
+    return res.status(400).render("account/update", {
+      title: "Update Account",
+      nav,
+      errors: null,
+      account: res.locals.accountData,
+    })
+  } catch (err) {
+    if (req.flash) req.flash("notice", "There was an error updating your password.")
+    return res.status(400).render("account/update", {
+      title: "Update Account",
+      nav,
+      errors: null,
+      account: res.locals.accountData,
+    })
+  }
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, buildManagement, accountLogin, logout, buildUpdate, updateAccount, updatePassword }

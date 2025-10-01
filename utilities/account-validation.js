@@ -1,7 +1,7 @@
 const utilities = require(".")
   const { body, validationResult } = require("express-validator")
   const validate = {}
-  const accountModel = require("../models/account-model")
+  const accountModel = require("../models/account-model")  
 
   /*  **********************************
   *  Registration Data Validation Rules
@@ -92,7 +92,7 @@ validate.loginRules = () => {
 }
 
 /* ******************************
- * Check login data and return errors or continue
+ * Check the login data and return errors or continue
  * ***************************** */
 validate.checkLoginData = async (req, res, next) => {
   const { account_email } = req.body
@@ -107,6 +107,75 @@ validate.checkLoginData = async (req, res, next) => {
     })
   }
   next()
+}
+
+validate.updateRules = () => {
+  return [
+    body("account_firstname")
+      .trim().escape().notEmpty().isLength({ min: 1 })
+      .withMessage("Please provide a first name."),
+    body("account_lastname")
+      .trim().escape().notEmpty().isLength({ min: 2 })
+      .withMessage("Please provide a last name."),
+    body("account_email")
+      .trim().notEmpty().isEmail().normalizeEmail()
+      .withMessage("A valid email is required.")
+      .custom(async (value, { req }) => {
+        // Allow the same email; but block it if the email belongs to another user
+        const existing = await accountModel.getAccountByEmail(value)
+        if (existing && Number(existing.account_id) !== Number(req.body.account_id)) {
+          throw new Error("That email is already in use.")
+        }
+      }),
+    body("account_id")
+      .toInt().isInt({ gt: 0 }).withMessage("Invalid account id."),
+  ]
+}
+
+validate.checkUpdateData = async (req, res, next) => {
+  const errors = validationResult(req)
+  if (errors.isEmpty()) return next()
+
+  const nav = await utilities.getNav(req)
+  return res.status(400).render("account/update", {
+    title: "Update Account",
+    nav,
+    errors,
+    account: res.locals.accountData, // so the page has context    
+    account_firstname: req.body.account_firstname,
+    account_lastname: req.body.account_lastname,
+    account_email: req.body.account_email,
+  })
+}
+
+/*  **********************************
+ *  Update Password
+ * ********************************* */
+validate.passwordRules = () => {
+  return [
+    body("account_password")
+      .trim()
+      .isStrongPassword({ minLength: 12, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })
+      .withMessage("Password does not meet requirements."),
+    body("account_id")
+      .toInt().isInt({ gt: 0 }).withMessage("Invalid account id."),
+  ]
+}
+
+validate.checkPasswordData = async (req, res, next) => {
+  const errors = validationResult(req)
+  if (errors.isEmpty()) return next()
+
+  const nav = await utilities.getNav(req)
+  return res.status(400).render("account/update", {
+    title: "Update Account",
+    nav,
+    errors,
+    account: res.locals.accountData,    
+    account_firstname: req.body.account_firstname ?? res.locals.accountData?.account_firstname,
+    account_lastname:  req.body.account_lastname  ?? res.locals.accountData?.account_lastname,
+    account_email:     req.body.account_email     ?? res.locals.accountData?.account_email,
+  })
 }
 
 module.exports = validate
