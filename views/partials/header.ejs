@@ -10,6 +10,9 @@
         <span class="welcome-badge">Welcome <strong><%= (accountData && accountData.account_firstname) ? accountData.account_firstname : "User" %></strong></span>
       </li>
       <li>
+        <a class="btn btn--login" href="/account/management" title="Manage account">Manage Account</a>
+      </li>
+      <li>
         <a class="btn btn--logout" href="/account/logout">Logout</a>
       </li>
     <% } else { %>

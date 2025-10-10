@@ -1,0 +1,49 @@
+<h1><%= title %></h1>
+<% if (typeof messages === "function") { %>
+  <div class="flash">
+    <%- messages() %>
+  </div>
+<% } %>
+<% if (errors && errors.length) { %>
+  <ul class="notice" role="alert">
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+<% if (errors && errors.length) { %>
+  <ul class="notice">
+    <% errors.forEach(e => { %>
+      <li><%= e.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<% if (vehicle) { %>
+  <p class="form-note">
+    <strong>Vehicle:</strong>
+    <%= vehicle.inv_year %> <%= vehicle.inv_make %> <%= vehicle.inv_model %>
+    — $<%= new Intl.NumberFormat('en-US').format(vehicle.inv_price) %>
+  </p>
+<% } %>
+
+<form method="post" action="/appointment/create" class="auth-form">
+  <input type="hidden" name="inv_id" value="<%= (values && values.inv_id) || (vehicle && vehicle.inv_id) || '' %>">
+
+  <label for="appt_date">Date</label>
+  <input type="date" id="appt_date" name="appt_date" required
+         value="<%= values?.appt_date || '' %>" min="<%= new Date().toISOString().slice(0,10) %>">
+
+  <label for="appt_start">Start Time</label>
+  <input type="time" id="appt_start" name="appt_start" required step="1800"
+         value="<%= values?.appt_start || '' %>">
+
+  <label for="appt_end">End Time</label>
+  <input type="time" id="appt_end" name="appt_end" required step="1800"
+         value="<%= values?.appt_end || '' %>">
+
+  <label for="notes">Notes (optional)</label>
+  <textarea id="notes" name="notes" rows="3"><%= values?.notes || '' %></textarea>
+
+  <button type="submit">Schedule Appointment</button>
+</form>

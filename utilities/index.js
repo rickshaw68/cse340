@@ -90,6 +90,7 @@ Util.buildVehicleDetail = function (vehicle) {
           <h2>About this vehicle</h2>
           <p>${vehicle.inv_description || "No description available."}</p>
         </div>
+        <a class="btn brn-primary" href="/appointment/new/${vehicle.inv_id}">Book a Test Drive</a>
       </div>
     </section>
   `

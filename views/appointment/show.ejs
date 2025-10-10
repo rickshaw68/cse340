@@ -1,0 +1,37 @@
+<h1><%= title %></h1>
+<% if (typeof messages === "function") { %>
+  <div class="flash">
+    <%- messages() %>
+  </div>
+<% } %>
+<% if (errors && errors.length) { %>
+  <ul class="notice" role="alert">
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+<dl class="form-page" style="max-width:600px;">
+  <div class="form-field"><strong>Date</strong><div><%= appt.appt_date.toISOString ? appt.appt_date.toISOString().slice(0,10) : appt.appt_date %></div></div>
+  <div class="form-field"><strong>Time</strong><div><%= appt.appt_start.slice(0,5) %>–<%= appt.appt_end.slice(0,5) %></div></div>
+  <div class="form-field"><strong>Status</strong><div><span class="status-pill status--<%= appt.appt_status %>"><%= appt.appt_status %></span></div></div>
+  <div class="form-field"><strong>Vehicle</strong><div><%= appt.inv_year %> <%= appt.inv_make %> <%= appt.inv_model %></div></div>
+  <% if (isStaff) { %>
+    <div class="form-field"><strong>Client</strong><div><%= appt.account_firstname %> <%= appt.account_lastname %></div></div>
+  <% } %>
+  <% if (appt.notes) { %>
+    <div class="form-field"><strong>Notes</strong><div><%= appt.notes %></div></div>
+  <% } %>
+</dl>
+
+<div class="button-row">
+  <a class="btn" href="<%= isStaff ? '/appointment/manage' : '/appointment/mine' %>">Back</a>
+  <% if (appt.appt_status === 'Scheduled') { %>
+    <% if (isStaff) { %>
+      <form action="/appointment/staff/complete/<%= appt.appt_id %>" method="post"><button class="btn" type="submit">Complete</button></form>
+      <form action="/appointment/staff/cancel/<%= appt.appt_id %>" method="post"><button class="btn" type="submit">Cancel</button></form>
+    <% } else { %>
+      <form action="/appointment/cancel/<%= appt.appt_id %>" method="post"><button class="btn" type="submit">Cancel</button></form>
+    <% } %>
+  <% } %>
+</div>

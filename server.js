@@ -19,6 +19,7 @@ const pool = require("./database/")
 const accountRoute = require("./routes/accountRoute")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
+const appointmentRoute = require("./routes/appointmentRoute")
 
 const app = express()
 
@@ -67,6 +68,7 @@ app.use(static)
 app.get("/", utilities.handleErrors(baseController.buildHome))
 app.use("/inv", inventoryRoute)
 app.use("/account", accountRoute)
+app.use("/appointment", appointmentRoute)
 app.use(async (req, res, next) => {
   next({status: 404, message: "Good news: You found the error page! Bad news: It's not what you were looking for"})
 })
@@ -79,6 +81,7 @@ app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav(req)
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
   console.error(err.stack || err)
+  let message
   if(err.status == 404){ message = err.message } else { message = 'Oh no! There was a crash. Maybe try a different link?' }
   res.render("errors/error", {
     title: err.status || 'Server Error',

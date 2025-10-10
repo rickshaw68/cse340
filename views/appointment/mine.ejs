@@ -1,0 +1,74 @@
+<h1>My Appointments</h1>
+<% if (typeof messages === "function") { %>
+  <div class="flash">
+    <%- messages() %>
+  </div>
+<% } %>
+<% if (errors && errors.length) { %>
+  <ul class="notice" role="alert">
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+<% if (!appts || !appts.length) { %>
+  <p class="form-note">You have no appointments scheduled.</p>
+<% } else { %>
+  <div class="table-wrap">
+  <table class="table appt-table">
+    <thead>
+      <tr>
+        <th class="col-date">Date</th>
+        <th class="col-time">Time</th>
+        <th>Vehicle</th>
+        <th>Status</th>
+        <th class="col-actions">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% appts.forEach(a => {
+         // date formatting that works for Date or string
+         const d = new Date(a.appt_date)
+         const dateStr = isNaN(d) ? a.appt_date
+           : d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' })
+         const start = (a.appt_start || '').slice(0,5)
+         const end = (a.appt_end || '').slice(0,5)
+         const statusClass = `status--${a.appt_status}`
+    %>
+      <tr>
+        <td class="col-date" data-label="Date"><%= dateStr %></td>
+        <td class="col-time" data-label="Time"><%= start %>&ndash;<%= end %></td>
+        <td class="cell-vehicle" data-label="Vehicle">
+          <%= a.inv_year %> <%= a.inv_make %> <%= a.inv_model %>
+        </td>
+        <td data-label="Status">
+          <span class="status-pill <%= statusClass %>"><%= a.appt_status %></span>
+        </td>
+
+        <td class="col-actions" data-label="Action">
+          <a class="btn"
+            href="/appointment/<%= a.appt_id %>"
+            aria-label="View details for <%= a.inv_year %> <%= a.inv_make %> <%= a.inv_model %> on <%= dateStr %> from <%= start %> to <%= end %>">
+            Details
+            <span class="sr-only">
+              for <%= a.inv_year %> <%= a.inv_make %> <%= a.inv_model %>,
+              <%= dateStr %>, <%= start %>&ndash;<%= end %>
+            </span>
+          </a>
+
+          <% if (a.appt_status === 'Scheduled') { %>
+            <form action="/appointment/cancel/<%= a.appt_id %>" method="post" style="display:inline">
+              <button type="submit" class="btn"
+                      aria-label="Cancel appointment on <%= dateStr %> for <%= a.inv_year %> <%= a.inv_make %> <%= a.inv_model %>">
+                Cancel
+              </button>
+            </form>
+          <% } %>
+        </td>
+      </tr>
+
+    <% }) %>
+    </tbody>
+  </table>
+</div>
+<% } %>
